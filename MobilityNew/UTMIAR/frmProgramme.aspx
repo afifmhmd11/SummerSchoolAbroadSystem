@@ -1,0 +1,166 @@
+﻿<%@ Page Title="ACAD2016." Language="C#" MasterPageFile="~/UTMIAR/UTMIRMasterPage.master" AutoEventWireup="true" CodeFile="frmProgramme.aspx.cs" Inherits="UTMIAR_frmProgramme" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="BodyContent" Runat="Server">
+    <div id="cssmenu2">
+        <ul style="font-size: small">
+            <li class="active"><a><span class="fa fa-inbox fa-lg"></span>&nbsp;Inbox</a></li>
+            <li><a href="frmProgOngoing.aspx"><span class="fa fa-calendar-o fa-lg"></span>&nbsp;Ongoing</a></li>
+            <li><a href="frmProgComplete.aspx"><span class="fa fa-check fa-lg"></span>&nbsp;Completed</a></li>
+        </ul>
+    </div>
+    <table style="float: right">
+        <tr>
+            <td>
+                <asp:Label ID="Label1" runat="server" Text="" Font-Bold="True">Progamme <span class="fa fa-arrow-right"></span>&nbsp;Programme Inbox</asp:Label>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <br>
+    <table style="width: 100%">
+        <tr>
+            <td align="center">
+                <asp:Label ID="lblSearch" runat="server" Text="Programme Name: "></asp:Label>
+                <asp:TextBox ID="txtSearch" runat="server" placeholder="- Programme Name -" style="width: 35%; border-radius: 5px; border: 1px solid CadetBlue;"></asp:TextBox>
+                <asp:LinkButton ID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_Click1"><i class="fa fa-search fa-lg" style="color:#FF9933"></i></asp:LinkButton>
+            </td>
+        </tr>
+    </table>
+    <table style="float: right">
+        <tr>
+            <td>
+                <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/UTMIAR/frmAddNewProg.aspx"><i class="fa fa-plus-circle fa-lg" style="color:maroon"></i> Add New Programme</asp:HyperLink>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <asp:Label ID="lblTxtSearchResult" runat="server" Text="Total Record Found: "></asp:Label>
+    <asp:Label ID="lblResult" runat="server" Text=""></asp:Label>
+    <br /><br />
+    <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" OldValuesParameterFormatString="original_{0}" SelectCommand="SELECT * FROM [PROGRAMME]">
+    </asp:SqlDataSource>
+    <asp:GridView ID="GridView1" runat="server" AllowPaging="True" AllowSorting="True" CellPadding="4" DataSourceID="SqlDataSource1" EmptyDataText="No record found" ForeColor="#333333" GridLines="None" AutoGenerateColumns="False" Width="100%">
+        <AlternatingRowStyle BackColor="White" />
+        <Columns>
+            <%--<asp:BoundField DataField="PROG_PROGID" HeaderText="PROG_PROGID" SortExpression="PROG_PROGID" />--%>
+            <asp:BoundField DataField="TYPE" HeaderText="TYPE" SortExpression="TYPE" />
+            <asp:BoundField DataField="PROGNAME" HeaderText="PROGNAME" SortExpression="PROGNAME" />
+            <asp:BoundField DataField="UNIVERSITY" HeaderText="UNIVERSITY" SortExpression="UNIVERSITY" />
+            <%--<asp:BoundField DataField="PROG_COUNTRY" HeaderText="PROG_COUNTRY" SortExpression="PROG_COUNTRY" />--%>
+            <%--<asp:BoundField DataField="PROG_STARTDATE" HeaderText="PROG_STARTDATE" SortExpression="PROG_STARTDATE" DataFormatString="{0:dd-MMM-yyyy}" />--%>
+            <%--<asp:BoundField DataField="PROG_ENDDATE" HeaderText="PROG_ENDDATE" SortExpression="PROG_ENDDATE" DataFormatString="{0:dd-MMM-yyyy}" />--%>
+            <asp:BoundField DataField="COUNTRY" HeaderText="COUNTRY" SortExpression="COUNTRY" />
+            <asp:BoundField DataField="DEADLINE" HeaderText="DEADLINE" SortExpression="DEADLINE" />
+
+            <asp:TemplateField HeaderText="Status" SortExpression="PROG_STATUS">
+                <ItemTemplate>
+                    <asp:Label ID="Status" runat="server" Text='<%# Eval("STATUS").ToString() == "0" ? "Draft" : "Submitted" %>'></asp:Label>
+                </ItemTemplate>
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="">
+                <HeaderStyle Width="3%" />
+             <ItemStyle Width="3%" />
+                <ItemTemplate>
+                    <asp:LinkButton ID="LinkButton1" runat="server" CommandArgument='<%# Eval("PROGID") %>' OnClick="ViewProg">
+                        <span class="fa fa-search fa-lg"></span></asp:LinkButton>
+                </ItemTemplate>
+                <HeaderStyle HorizontalAlign="Center" />
+                <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="5%" />
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="">
+                <HeaderStyle Width="3%" />
+             <ItemStyle Width="3%" />
+                <ItemTemplate>
+                    <asp:LinkButton ID="LinkButton2" runat="server" CommandArgument='<%# Eval("PROGID") %>'
+                        OnClick="DeleteProg" OnClientClick="return confirm('Are you sure to delete this programme?');">
+                        <span class="fa fa-trash fa-lg"></span></asp:LinkButton>
+                </ItemTemplate>
+                <HeaderStyle HorizontalAlign="Center" />
+                <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="5%" />
+            </asp:TemplateField>
+
+        </Columns>
+        <FooterStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
+        <HeaderStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
+        <PagerStyle BackColor="#FFCC66" ForeColor="#333333" HorizontalAlign="Center" />
+        <RowStyle BackColor="#FFFBD6" ForeColor="#333333" />
+        <SelectedRowStyle BackColor="#FFCC66" Font-Bold="True" ForeColor="Navy" />
+        <SortedAscendingCellStyle BackColor="#FDF5AC" />
+        <SortedAscendingHeaderStyle BackColor="#4D0000" />
+        <SortedDescendingCellStyle BackColor="#FCF6C0" />
+        <SortedDescendingHeaderStyle BackColor="#820000" />
+    </asp:GridView>
+    <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT * FROM [PROGRAMME]">
+    </asp:SqlDataSource>
+    <asp:GridView ID="GridView2" runat="server" AutoGenerateColumns="False" CellPadding="4" DataSourceID="SqlDataSource2" ForeColor="#333333" GridLines="None" AllowPaging="True" AllowSorting="True" Visible="False" EmptyDataText="No record found" Width="1247px">
+        <AlternatingRowStyle BackColor="White" />
+        <Columns>
+            <%--<asp:BoundField DataField="PROG_PROGID" HeaderText="PROG_PROGID" SortExpression="PROG_PROGID" />--%>
+            <asp:BoundField DataField="TYPE" HeaderText="TYPE" SortExpression="TYPE" />
+            <asp:BoundField DataField="PROGNAME" HeaderText="PROGNAME" SortExpression="PROGNAME" />
+            <asp:BoundField DataField="UNIVERSITY" HeaderText="UNIVERSITY" SortExpression="UNIVERSITY" />
+            <%--<asp:BoundField DataField="PROG_COUNTRY" HeaderText="PROG_COUNTRY" SortExpression="PROG_COUNTRY" />--%>
+            <%--<asp:BoundField DataField="PROG_STARTDATE" HeaderText="PROG_STARTDATE" SortExpression="PROG_STARTDATE" DataFormatString="{0:dd-MMM-yyyy}" />--%>
+            <%--<asp:BoundField DataField="PROG_ENDDATE" HeaderText="PROG_ENDDATE" SortExpression="PROG_ENDDATE" DataFormatString="{0:dd-MMM-yyyy}" />--%>
+            <asp:BoundField DataField="COUNTRY" HeaderText="COUNTRY" SortExpression="COUNTRY" />
+            <%--<asp:BoundField DataField="PROG_STATUS" HeaderText="Status" SortExpression="PROG_STATUS" />--%>
+            <asp:BoundField DataField="DEADLINE" HeaderText="DEADLINE" SortExpression="DEADLINE" />
+
+            <asp:TemplateField HeaderText="Status" SortExpression="PROG_STATUS">
+                <ItemTemplate>
+                    <asp:Label ID="Status" runat="server" Text='<%# Eval("STATUS").ToString() == "0" ? "Draft" : "Submitted" %>'></asp:Label>
+                </ItemTemplate>
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="">
+                <HeaderStyle Width="3%" />
+             <ItemStyle Width="3%" />
+                <ItemTemplate>
+                    <asp:LinkButton ID="LinkButton1" runat="server" CommandArgument='<%# Eval("PROGID") %>'
+                        OnClick="ViewProg">
+                        <span class="fa fa-search fa-lg"></span></asp:LinkButton>
+                </ItemTemplate>
+                <HeaderStyle HorizontalAlign="Center" />
+                <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="5%" />
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="">
+                <HeaderStyle Width="3%" />
+             <ItemStyle Width="3%" />
+                <ItemTemplate>
+                    <asp:LinkButton ID="LinkButton2" runat="server" CommandArgument='<%# Eval("PROGID") %>'
+                        OnClick="DeleteProg" OnClientClick="return confirm('Are you sure to delete this programme?');">
+                        <span class="fa fa-trash fa-lg"></span></asp:LinkButton>
+                </ItemTemplate>
+                <HeaderStyle HorizontalAlign="Center" />
+                <ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="5%" />
+            </asp:TemplateField>
+        </Columns>
+        <FooterStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
+        <HeaderStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
+        <PagerStyle BackColor="#FFCC66" ForeColor="#333333" HorizontalAlign="Center" />
+        <RowStyle BackColor="#FFFBD6" ForeColor="#333333" />
+        <SelectedRowStyle BackColor="#FFCC66" Font-Bold="True" ForeColor="Navy" />
+        <SortedAscendingCellStyle BackColor="#FDF5AC" />
+        <SortedAscendingHeaderStyle BackColor="#4D0000" />
+        <SortedDescendingCellStyle BackColor="#FCF6C0" />
+        <SortedDescendingHeaderStyle BackColor="#820000" />
+    </asp:GridView>
+    <br />
+    <table style="border: 1px dotted #64001C; border-radius: 15px; width: 100%">
+        <tr>
+            <td colspan="4">
+                <strong>Legends:</strong>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;
+                <asp:LinkButton ID="LinkButton3" runat="server">
+                <span class="fa fa-search fa-lg"></span>&nbsp;View Programme</asp:LinkButton>
+                &nbsp;&nbsp;&nbsp;
+                <asp:LinkButton ID="LinkButton4" runat="server">
+                <span class="fa fa-trash fa-lg"></span>&nbsp;Delete Programme</asp:LinkButton>
+            </td>
+        </tr>
+    </table>
+</asp:Content>
+
